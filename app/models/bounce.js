@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var BounceSchema = new Schema({
   text : String,
   post_id: String,
+  user_id: String,
   loc: {
     type: [Number],
     index: '2d'
