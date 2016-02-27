@@ -33,13 +33,13 @@ router.get('/', function(req, res) {
 
 router.route('/post')
   // Retrieve next 10 posts
-  // INPUT: (lat, lng), offset, timestamp of last query
+  // INPUT: (lng, lat), offset, timestamp of last query
   // OUTPUT: next 10 posts ordered by distance
   .get(function(req, res) {
     console.log("test");
   })
   // Add new post
-  // INPUT: text, user_id, (lat, lng), time
+  // INPUT: text, user_id, (lat, lng),
   // OUTPUT: success/failure message
   .post(function(req, res) {
     var post = new Post();
@@ -61,6 +61,23 @@ router.route('/post')
 
         res.json({message: "Post Created!"});
       });
+    });
+  });
+
+router.route('/bounce')
+  // Bounce a post
+  // INPUT: (lng, lat), user_id, post_id
+  .post(function(req, res) {
+    var bounce = new Bounce();
+    bounce.post_id = req.body.post_id; 
+    bounce.user_id = req.body.user_id;
+    bounce.loc = [req.body.lng, req.body.lat];
+
+    bounce.save(function(err) {
+      if(err)
+        res.send(err);
+
+      res.json({message: "Post Bounced"});
     });
   });
 
