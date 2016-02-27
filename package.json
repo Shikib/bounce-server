@@ -1,0 +1,17 @@
+{
+  "name": "bounce-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "license": "ISC",
+  "dependencies": {
+    "express": "*",
+    "mongoose": "*",
+    "body-parser": "*"
+  },
+
+  "engines": {
+    "node": "5.4.1"
+  }
+}
+
