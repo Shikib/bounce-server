@@ -68,7 +68,6 @@ router.route('/post')
         res.json(posts);
       });
     });
-
   })
   // Add new post
   // INPUT: text, user_id, (lat, lng),
@@ -151,7 +150,7 @@ router.route('/bounce')
     });
   });
 
-router.route('my_posts')
+router.route('/my_posts')
   // Retrieve everything you posted
   // INPUT: user_id
   // OUTPUT: list of posts authored by user
@@ -166,7 +165,7 @@ router.route('my_posts')
     }); 
   });
   
-router.route('post_bounces')
+router.route('/post_bounces')
   // Retrieve all the bounces for a post
   // INPUT: post_id
   // OUTPUT: list of bounces
