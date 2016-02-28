@@ -133,7 +133,7 @@ router.route('/bounce')
   // OUTPUT: all of your bounces
   .get(function(req, res) {
     Bounce.find({
-      user_id : user_id
+      user_id : req.query.user_id
     }).distinct("post_id").exec(function(err, bounces) {
       if(err)
         return res.send(err);
