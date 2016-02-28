@@ -140,7 +140,7 @@ router.route('/bounce')
 
       Post.find({
         _id : {
-          $in : newBounces
+          $in : bounces
         },
         last_bounce : {
           $gt : new Date(Date.now() - 1000*60*60*24)
