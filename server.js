@@ -108,13 +108,27 @@ router.route('/bounce')
       if(err)
         res.send(err);
 
-      res.json({message: "Post Bounced"});
+      Post.findByIdAndUpdate(
+        req.body.post_id,
+        {
+          $set: {
+            last_bounce : Date.now()
+          }
+        },
+        function(err) {
+          if(err)
+            res.send(err);  
+  
+          res.json({message: "Post Bounced"});
+        }
+      );
     });
+
   })
   // Get all of the things you've bounced
   // INPUT: user_id
   // OUTPUT: all of your bounces
-  $.get(function(req, res) {
+  .get(function(req, res) {
     Bounce.find({
       user_id : user_id
     }).distinct("post_id").exec(function(err, bounces) {
