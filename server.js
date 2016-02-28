@@ -39,7 +39,7 @@ router.route('/post')
   .get(function(req, res) {
     var offset = req.query.offset || 0;
     var limit = req.query.limit || 10;
-    var max_distance = req.query.max_distance || 10;
+    var max_distance = req.query.max_distance || 500;
 
     // Since the radius of the Earth is 6371 km, divide by it
     max_distance = max_distance / 6371;
