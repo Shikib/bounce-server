@@ -105,7 +105,7 @@ router.route('/bounce')
     var bounce = new Bounce();
     bounce.post_id = req.body.post_id; 
     bounce.user_id = req.body.user_id;
-    bounce.loc = [req.body.lng, req.body.lat];
+    bounce.loc = [parseInt(req.body.lng), parseInt(req.body.lat)];
 
     bounce.save(function(err) {
       if(err)
