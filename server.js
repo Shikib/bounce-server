@@ -143,6 +143,17 @@ router.route('my_posts')
     }); 
   });
   
+router.route('post_bounces')
+  // Retrieve all the bounces for a post
+  // INPUT: post_id
+  // OUTPUT: list of bounces
+  .get(function(req, res) {
+    Bounce.find({
+      post_id : req.query.post_id
+    }).exec(function(err, bounces) {
+      res.json(bounces);
+    });
+  });
 
 app.listen(port);
 
