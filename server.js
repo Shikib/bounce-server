@@ -36,8 +36,6 @@ router.route('/post')
   // INPUT: (lng, lat), offset, timestamp of last query
   // OUTPUT: next 10 posts ordered by distance
   .get(function(req, res) {
-    console.log("test");
-      
     var offset = req.query.offset || 0;
     var limit = req.query.limit || 10;
     var max_distance = req.query.max_distance || 10;
@@ -52,12 +50,20 @@ router.route('/post')
         $near : user_loc,
         $maxDistance : max_distance
       }
-    }).limit(limit).skip(offset).exec(function(err, locations) {
+    }).distinct("post_id").exec(function(err, bounces) {
       if(err)
         return res.send(err);
 
-      console.log(locations);
-      res.json(locations);
+      // Hacky fix to do limit/offset
+      var newBounces = bounces.slice(offset, offset + limit);
+
+      Post.find({
+        _id : {
+          $in : newBounces
+        }
+      }).exec(function(err, posts) {
+        res.json(posts);
+      });
     });
 
   })
