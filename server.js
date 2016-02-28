@@ -60,6 +60,9 @@ router.route('/post')
       Post.find({
         _id : {
           $in : newBounces
+        },
+        last_bounce : {
+          $gt : new Date(Date.now() - 1000*60*60*24)
         }
       }).exec(function(err, posts) {
         res.json(posts);
@@ -138,6 +141,9 @@ router.route('/bounce')
       Post.find({
         _id : {
           $in : newBounces
+        },
+        last_bounce : {
+          $gt : new Date(Date.now() - 1000*60*60*24)
         }
       }).exec(function(err, posts) {
         res.json(posts);
@@ -151,7 +157,10 @@ router.route('my_posts')
   // OUTPUT: list of posts authored by user
   .get(function(req, res) {
     Post.find({
-      author : req.query.user_id
+      author : req.query.user_id,
+      last_bounce : {
+        $gt : new Date(Date.now() - 1000*60*60*24)
+      }
     }).exec(function(err, posts) {
       res.json(posts);
     }); 
