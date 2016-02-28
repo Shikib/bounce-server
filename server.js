@@ -74,6 +74,7 @@ router.route('/post')
     var post = new Post();
     post.text = req.body.text;
     post.bounce_count = 1;
+    post.author = req.body.user;
 
     var bounce = new Bounce();
     bounce.post_id = post._id;
@@ -128,6 +129,18 @@ router.route('/bounce')
         res.json(posts);
       });
     });
+  });
+
+router.route('my_posts')
+  // Retrieve everything you posted
+  // INPUT: user_id
+  // OUTPUT: list of posts authored by user
+  .get(function(req, res) {
+    Post.find({
+      author : req.query.user_id
+    }).exec(function(err, posts) {
+      res.json(posts);
+    }); 
   });
   
 
