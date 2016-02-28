@@ -16,6 +16,7 @@ app.use('/api', router);
 
 var Post = require('./app/models/post');
 var Bounce = require('./app/models/bounce');
+var Comment = require('./app/models/comment');
 
 // ===============================================
 // ================== Routes =====================
@@ -76,11 +77,11 @@ router.route('/post')
     var post = new Post();
     post.text = req.body.text;
     post.bounce_count = 1;
-    post.author = req.body.user;
+    post.author = req.body.user_id;
 
     var bounce = new Bounce();
     bounce.post_id = post._id;
-    bounce.user_id = req.body.user;
+    bounce.user_id = req.body.user_id;
     bounce.loc = [req.body.lng, req.body.lat];
     
     post.save(function(err) {
@@ -161,6 +162,9 @@ router.route('/my_posts')
         $gt : new Date(Date.now() - 1000*60*60*24)
       }
     }).exec(function(err, posts) {
+      if(err)
+        res.send(err);
+
       res.json(posts);
     }); 
   });
@@ -173,7 +177,41 @@ router.route('/post_bounces')
     Bounce.find({
       post_id : req.query.post_id
     }).exec(function(err, bounces) {
+      if(err)
+        res.send(err);
+
       res.json(bounces);
+    });
+  });
+
+router.route('/comment')
+  // Retrieve the last 10 comments for a page
+  // INPUT: post_id
+  // OUTPUT: list of comments
+  .get(function(req, res) {
+    Comment.find({
+      post_id : req.query.post_id
+    }).sort('-time').limit(10).exec(function(err, comments) {
+      if(err)
+        res.send(err);
+
+      res.json(comments);
+    });
+  })
+  // Post a new comment
+  // INPUT: post_id, user_id, comment text
+  // OUTPUT: confirmation message
+  .post(function(req, res) {
+    var comment = new Comment();
+    comment.text = req.body.text;
+    comment.user_id = req.body.user_id;
+    comment.post_id = req.body.post_id;
+    
+    comment.save(function(err) {
+      if(err)
+        res.send(err);
+
+      res.json({message: "Comment Created!"});
     });
   });
 
