@@ -109,7 +109,27 @@ router.route('/bounce')
 
       res.json({message: "Post Bounced"});
     });
+  })
+  // Get all of the things you've bounced
+  // INPUT: user_id
+  // OUTPUT: all of your bounces
+  $.get(function(req, res) {
+    Bounce.find({
+      user_id : user_id
+    }).distinct("post_id").exec(function(err, bounces) {
+      if(err)
+        return res.send(err);
+
+      Post.find({
+        _id : {
+          $in : newBounces
+        }
+      }).exec(function(err, posts) {
+        res.json(posts);
+      });
+    });
   });
+  
 
 app.listen(port);
 
