@@ -37,6 +37,29 @@ router.route('/post')
   // OUTPUT: next 10 posts ordered by distance
   .get(function(req, res) {
     console.log("test");
+      
+    var offset = req.query.offset || 0;
+    var limit = req.query.limit || 10;
+    var max_distance = req.query.max_distance || 10;
+
+    // Since the radius of the Earth is 6371 km, divide by it
+    max_distance = max_distance / 6371;
+
+    var user_loc = [req.query.lng, req.query.lat];
+
+    Bounce.find({
+      loc : {
+        $near : user_loc,
+        $maxDistance : max_distance
+      }
+    }).limit(limit).skip(offset).exec(function(err, locations) {
+      if(err)
+        return res.send(err);
+
+      console.log(locations);
+      res.json(locations);
+    });
+
   })
   // Add new post
   // INPUT: text, user_id, (lat, lng),
@@ -67,6 +90,7 @@ router.route('/post')
 router.route('/bounce')
   // Bounce a post
   // INPUT: (lng, lat), user_id, post_id
+  // OUTPUT: success/failure message
   .post(function(req, res) {
     var bounce = new Bounce();
     bounce.post_id = req.body.post_id; 
